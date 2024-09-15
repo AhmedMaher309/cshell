@@ -1,27 +1,18 @@
-#include <sys/wait.h> 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
-#define C_READ_BUF_SIZE 1024
-#define C_TOK_BUFSIZE 64
-
+#include "header.h"
 
 void welcome()
 {	
-  printf("============================================================\n");
-  printf("|                                                          |\n");
-  printf("|                 Welcome to C-Shell!                      |\n");
-  printf("|                                                          |\n");
-  printf("|  This is CShell, my own shell.                           |\n");
-  printf("|  You are using it at your own risk!                      |\n");
-  printf("|                                                          |\n");
-  printf("|            ⚠️   Proceed with caution ⚠️                    |\n");
-  printf("|                                                          |\n");
-  printf("|        Bugs are just misunderstood features              |\n");
-  printf("|                                                          |\n");
-  printf("============================================================\n");
+  printf("============================================================\n"
+ "|                                                          |\n"
+ "|                 Welcome to C-Shell!                      |\n"
+ "|                                                          |\n"
+ "|  This is CShell, my own shell.                           |\n"
+ "|  You are using it at your own risk!                      |\n"
+ "|                                                          |\n"
+ "|                                                          |\n"
+ "|        * Bugs are just misunderstood features *          |\n"
+ "|                                                          |\n"
+ "============================================================\n");
 }
 
 
@@ -63,7 +54,7 @@ char **csplit_line(char *line)
     int position = 0;
     char **tokens = malloc(bufsize * sizeof(char*));
     char *token;
-    char *delim = "\t\r\n\a";
+    char *delim = "\t\r\n\a ";
 
     if (!tokens) {
         fprintf(stderr, "C: allocation error\n");
@@ -93,7 +84,7 @@ char **csplit_line(char *line)
 
 int c_launch(char **args)
 {
-  pid_t pid, wpid;
+  pid_t pid;
   int status;
 
   pid = fork();
@@ -109,7 +100,7 @@ int c_launch(char **args)
   } else {
     //inside parent
     do {
-      wpid = waitpid(pid, &status, WUNTRACED);
+      waitpid(pid, &status, WUNTRACED);
     } while (!WIFEXITED(status) && !WIFSIGNALED(status));
   }
   return 1;
@@ -118,12 +109,13 @@ int c_launch(char **args)
 
 int c_execute(char **args)
 {
-  int i;
-
   if (args[0] == NULL) {
     // An empty command was entered.
     return 1;
   }
+	if(strcmp(args[0], "cd") == 0){
+		return c_cd(args);
+	}
 
   return c_launch(args);
 }
