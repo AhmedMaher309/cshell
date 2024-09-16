@@ -20,3 +20,12 @@ int c_cd(char **args)
   }
   return 1;
 }
+
+// exit command
+int c_exit(char ** args){
+	if(strcmp(args[0],"exit") == 0){
+		return 0;
+	}
+	return 0;
+}
+

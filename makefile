@@ -2,7 +2,7 @@
 CC = gcc
 
 CFLAGS = -Wall -Wextra -pedantic -std=c11
-TARGET = shell
+TARGET = cshell
 SOURCES = main.c commands.c
 
 OBJECTS = $(SOURCES:.c=.o)

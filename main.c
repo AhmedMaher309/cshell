@@ -107,17 +107,22 @@ int c_launch(char **args)
 }
 
 
+
+typedef int(*Command)(char **);
+Command commands[] = {c_cd, c_exit};
+const char *command_names[] = {"cd", "exit"};
+
 int c_execute(char **args)
 {
-  if (args[0] == NULL) {
-    // An empty command was entered.
-    return 1;
-  }
-	if(strcmp(args[0], "cd") == 0){
-		return c_cd(args);
-	}
-
-  return c_launch(args);
+    if (args[0] == NULL) {
+        return 1;
+    }
+    for(size_t i = 0; i < sizeof(commands) / sizeof(commands[0]); i++){
+        if(strcmp(args[0], command_names[i]) == 0){
+            return commands[i](args);
+        }
+    }
+    return c_launch(args);
 }
 
 

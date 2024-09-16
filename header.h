@@ -10,3 +10,4 @@
 
 
 int c_cd(char ** args);
+int c_exit(char ** args);
