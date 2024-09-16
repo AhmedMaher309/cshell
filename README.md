@@ -24,6 +24,7 @@ CShell is a lightweight, custom-built shell implemented in C. It provides basic 
    ```
    $ ls
    $ cd /path/to/directory
+   $ echo
    $ clear
    ```
 
