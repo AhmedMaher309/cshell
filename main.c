@@ -1,18 +1,31 @@
 #include "header.h"
 
+
 void welcome()
 {	
-  printf("============================================================\n"
- "|                                                          |\n"
- "|                 Welcome to C-Shell!                      |\n"
- "|                                                          |\n"
- "|  This is CShell, my own shell.                           |\n"
- "|  You are using it at your own risk!                      |\n"
- "|                                                          |\n"
- "|                                                          |\n"
- "|        * Bugs are just misunderstood features *          |\n"
- "|                                                          |\n"
- "============================================================\n");
+  printf(ANSI_COLOR_CYAN
+         "============================================================\n"
+         "|                                                          |\n"
+         "|                 Welcome to " ANSI_COLOR_YELLOW "C-Shell!" ANSI_COLOR_CYAN "                      |\n"
+         "|                                                          |\n"
+         "|  This is CShell, my own shell.                           |\n"
+         "|  You are using it at your own risk!                      |\n"
+         "|                                                          |\n"
+         "|                                                          |\n"
+         "|        * Bugs are just misunderstood features *          |\n"
+         "|                                                          |\n"
+         "============================================================\n"
+         ANSI_COLOR_RESET);
+}
+
+// function to print the current directory in colors
+void print_prompt() {
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        printf(ANSI_COLOR_GREEN "cshell" ANSI_COLOR_RESET ":" ANSI_COLOR_BLUE "%s" ANSI_COLOR_RESET "$ ", cwd);
+    } else {
+        printf(ANSI_COLOR_GREEN "cshell" ANSI_COLOR_RESET "$ ");
+    }
 }
 
 
@@ -91,12 +104,14 @@ int c_launch(char **args)
   if (pid == 0) {
     //inside child
     if (execvp(args[0], args) == -1) {
-      perror("c");
+			fprintf(stderr, ANSI_COLOR_RED "c: %s: command not found\n" ANSI_COLOR_RESET, args[0]);
     }
     exit(EXIT_FAILURE);
+
   } else if (pid < 0) {
     //error in forking
-    perror("c");
+    perror(ANSI_COLOR_RED "c" ANSI_COLOR_RESET);
+
   } else {
     //inside parent
     do {
@@ -132,7 +147,7 @@ void cloop() {
     int stat = 1;
 
     do {
-        printf("$ ");
+			  print_prompt();
         line = cread_line();
         args = csplit_line(line);
         stat = c_execute(args);
